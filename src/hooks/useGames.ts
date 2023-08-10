@@ -3,11 +3,21 @@ import apiClient from "../services/api-client";
 import { AbsoluteCenter } from "@chakra-ui/react";
 import { CanceledError } from "axios";
 
+
+
+export interface Platform{
+  id: number;
+  name: string;
+  slug: string;
+}
+
 // using the interface Game to destructure the data we want to fetch.
 export interface Game {
     id: number;
     name: string;
     background_image: string;
+    parent_platforms: {platform: Platform}[]
+
   }
   
   interface FetchGameResponse {
