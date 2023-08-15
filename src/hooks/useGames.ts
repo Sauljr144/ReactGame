@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
 import { AbsoluteCenter } from "@chakra-ui/react";
 import { CanceledError } from "axios";
+import useData from "./useData";
 
 
 
@@ -21,35 +22,11 @@ export interface Game {
 
   }
   
-  interface FetchGameResponse {
-    count: number;
-    results: Game[];
-  }
+  // interface FetchGameResponse {
+  //   count: number;
+  //   results: Game[];
+  // }
 
-const useGames = () => {
-    const [games, setGames] = useState<Game[]>([]); //setting the type of useState with the Game interface
-    const [error, setError] = useState("");
-    const [isLoading, setIsLoading] = useState(false)
-  
-    useEffect(() => {
-
-        const controller = new AbortController(); //disconnects from API
-      setIsLoading(true) //indicator will appear when data is loading
-      apiClient
-        .get<FetchGameResponse>("/games", {signal: controller.signal})
-        .then((response) => {
-          setGames(response.data.results)
-          setIsLoading(false)}) ///setting out loading indicator to false
-        .catch((error) => {
-            if(error instanceof CanceledError) return;
-            setError(error.message)
-            setIsLoading(false); //if an error we wont see the loading indicator
-        });
-
-        return() => controller.abort();
-
-    }, []); //always have the dependacy [value]
-    return {games, error, isLoading}
-}
+const useGames = () => useData<Game>('/games');
 
 export default useGames;
