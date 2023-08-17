@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
-import { CanceledError } from "axios";
+import { Axios, AxiosRequestConfig, CanceledError } from "axios";
 
 // Generic custom hook
 
@@ -8,8 +8,8 @@ interface FetchResponse<T> {
   count: number;
   results: T[];
 }
-
-const useData = <T>(endpoint: string) => {
+// ? means optional
+const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig) => {
   const [data, setData] = useState<T[]>([]); //setting the type of useState with the Game interface
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -18,7 +18,7 @@ const useData = <T>(endpoint: string) => {
     const controller = new AbortController(); //disconnects from API
     setIsLoading(true); //indicator will appear when data is loading
     apiClient
-      .get<FetchResponse<T>>(endpoint, { signal: controller.signal })
+      .get<FetchResponse<T>>(endpoint, { signal: controller.signal,...requestConfig })
       .then((response) => {
         setData(response.data.results);
         setIsLoading(false);
@@ -30,7 +30,7 @@ const useData = <T>(endpoint: string) => {
       });
 
     return () => controller.abort();
-  }, []); //always have the dependacy [value]
+  },[]); //always have the dependacy [value]
   return { data, error, isLoading };
 };
 
