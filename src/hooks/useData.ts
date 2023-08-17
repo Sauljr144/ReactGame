@@ -9,7 +9,7 @@ interface FetchResponse<T> {
   results: T[];
 }
 // ? means optional
-const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig) => {
+const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig, deps?: any) => {
   const [data, setData] = useState<T[]>([]); //setting the type of useState with the Game interface
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,7 +30,7 @@ const useData = <T>(endpoint: string, requestConfig?: AxiosRequestConfig) => {
       });
 
     return () => controller.abort();
-  },[]); //always have the dependacy [value]
+  },deps ? [...deps] : []); //always have the dependacy [value]
   return { data, error, isLoading };
 };
 
