@@ -8,23 +8,26 @@ import GameCardContainer from "./GameCardContainer";
 import { Genre } from "../hooks/useGenres";
 import { GameQuery } from "../App";
 
-interface Props{
-  gameQuery: GameQuery
+interface Props {
+  gameQuery: GameQuery;
 }
 
-
-const GameGrid = ({gameQuery}:Props) => {
+const GameGrid = ({ gameQuery }: Props) => {
   // imported from our useGames hook
   const { data, error, isLoading } = useGames(gameQuery);
-  const skeleton = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,34,35,36,37,38,39,40,41,42,43,45,46,47,48,49,50];
+  const skeleton = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
+    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 34, 35, 36, 37, 38, 39, 40, 41,
+    42, 43, 45, 46, 47, 48, 49, 50,
+  ];
 
   return (
     <>
       {error && <Text>{error}</Text>}
       <SimpleGrid
-        columns={{ sm: 1, md: 2, lg: 3, xl: 5 }}
+        columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
         padding="20px"
-        spacing={3}
+        spacing={6}
       >
         {isLoading &&
           skeleton.map((skelly) => (
@@ -34,7 +37,7 @@ const GameGrid = ({gameQuery}:Props) => {
           ))}
 
         {data.map((game) => (
-          <GameCardContainer key={game.id} >
+          <GameCardContainer key={game.id}>
             <GameCard game={game}></GameCard>
           </GameCardContainer>
         ))}

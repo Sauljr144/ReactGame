@@ -2,6 +2,7 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import "./App.css";
 import {
+  Box,
   Button,
   ButtonGroup,
   Grid,
@@ -16,11 +17,14 @@ import { Genre } from "./hooks/useGenres";
 import PlatformSelector from "./components/PlatformSelector";
 import { Platform } from "./hooks/useGames";
 import SortSelector from "./components/SortSelector";
+import GameHeading from "./components/GameHeading";
 
 // GameQuery carries our genre and platform, we can use this in other parts
 export interface GameQuery {
   genre: Genre | null;
   platform: Platform | null;
+  sortOrder: string;
+  searchText: string
 }
 
 function App() {
@@ -40,10 +44,10 @@ function App() {
         }}
       >
         <GridItem area="nav">
-          <NavBar />
+          <NavBar onSearch={(searchText) => setGameQuery({...gameQuery, searchText}) }/>
         </GridItem>
         <Show above="lg">
-          <GridItem area="aside" paddingX={5}>
+          <GridItem area="aside" paddingX={1}>
             <GenerList
               selectedGenre={gameQuery.genre}
               onSelectGenre={(genre) => setGameQuery({ ...gameQuery, genre })}
@@ -51,15 +55,18 @@ function App() {
           </GridItem>
         </Show>
         <GridItem area="main">
-          <HStack marginLeft='20px' marginBottom={5} spacing={5}>
+          <Box paddingLeft={5}>
+          <GameHeading gameQuery={gameQuery}/>
+          <HStack marginBottom={5} spacing={5}>
             <PlatformSelector
               selectedPlatform={gameQuery.platform}
               onSelectPlatform={(platform) =>
                 setGameQuery({ ...gameQuery, platform })
               }
             />
-            <SortSelector />
+            <SortSelector sortOrder={gameQuery.sortOrder} onSelectSortOrder={(sortOrder) => setGameQuery({...gameQuery, sortOrder})} />
           </HStack>
+          </Box>
           <GameGrid gameQuery={gameQuery} />
         </GridItem>
       </Grid>
